@@ -1,9 +1,4 @@
 services:
-  cache:
-    image: redis
-    restart: always
-    ports:
-      - 6379:6379
   postgres:
     image: postgres:17
     command: '-d 1'
