@@ -1,10 +1,15 @@
 services:
+  cache:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
   db:
     image: postgres
     restart: always
     ports:
       - 5432:5432
-    environment: 
+    environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: local
