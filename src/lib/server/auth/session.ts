@@ -7,7 +7,7 @@ export function generateSessionToken(): string {
 	return crypto.randomUUID();
 }
 
-export async function createSession(token: string, userId: number): Promise<Session> {
+export async function createSession(token: string, userId: number) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: Session = {
 		id: sessionId,
@@ -18,7 +18,7 @@ export async function createSession(token: string, userId: number): Promise<Sess
 	return session;
 }
 
-export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
+export async function validateSessionToken(token: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const result = await db
 		.select({ user: schema.user, session: schema.session })
@@ -43,7 +43,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
 	return { session, user };
 }
 
-export async function invalidateSession(sessionId: string): Promise<void> {
+export async function invalidateSession(sessionId: string) {
 	await db.delete(schema.session).where(eq(schema.session.id, sessionId));
 }
 
