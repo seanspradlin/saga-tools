@@ -2,7 +2,9 @@ import type { InferSelectModel } from 'drizzle-orm';
 import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {
-	id: serial('id').primaryKey()
+	id: serial('id').primaryKey(),
+	name: text('name'),
+	googleId: text('google_id')
 });
 
 export const session = pgTable('session', {
