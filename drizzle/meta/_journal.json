@@ -15,6 +15,27 @@
       "when": 1733162812065,
       "tag": "0001_quick_sister_grimm",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1733190909447,
+      "tag": "0002_serious_piledriver",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1733191334737,
+      "tag": "0003_chief_blue_shield",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1733201779677,
+      "tag": "0004_cold_enchantress",
+      "breakpoints": true
     }
   ]
 }

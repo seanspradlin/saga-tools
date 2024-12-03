@@ -2,6 +2,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { env } from '$env/dynamic/private';
 import ws from 'ws';
+import * as schema from './schema';
 
 if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 let connectionString = env.DATABASE_URL;
@@ -20,5 +21,5 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const sql = neon(connectionString);
-export const db = drizzle({ client: sql });
+export const db = drizzle({ client: sql, schema });
 export * from './schema';

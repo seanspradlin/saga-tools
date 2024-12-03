@@ -10,9 +10,10 @@ export default {
 		extend: {}
 	},
 
-  daisyui: {
-    themes: ['dracula']
-  },
+	daisyui: {
+		logs: false,
+		themes: ['fantasy']
+	},
 
 	plugins: [typography, forms, daisyui]
 } satisfies Config;
