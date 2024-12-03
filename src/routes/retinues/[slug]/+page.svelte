@@ -6,7 +6,13 @@
 <h1 class="font-bold text-xl">{data.retinue.name}</h1>
 <ul>
 	{#each data.members as member (member.id)}
-		<li><a href="/retinues/{data.retinue.slug}/{member.id}">{member.name}</a></li>
+		<li>
+			<a href="/retinues/{data.retinue.slug}/{member.id}">{member.name}</a>
+			<form method="POST" action="?/removeMember">
+				<input type="hidden" value={member.id} name="characterId" />
+				<button type="submit">Remove</button>
+			</form>
+		</li>
 	{/each}
 </ul>
 
