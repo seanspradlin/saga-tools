@@ -1,0 +1,1 @@
+ALTER TABLE "retinue" ADD COLUMN "slug" text NOT NULL;

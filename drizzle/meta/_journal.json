@@ -36,6 +36,13 @@
       "when": 1733201779677,
       "tag": "0004_cold_enchantress",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1733255824748,
+      "tag": "0005_pretty_xavin",
+      "breakpoints": true
     }
   ]
 }

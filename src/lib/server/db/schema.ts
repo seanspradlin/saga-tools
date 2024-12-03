@@ -1,5 +1,5 @@
 import { type InferSelectModel, relations } from 'drizzle-orm';
-import { pgTable, serial, text, integer, timestamp, primaryKey } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, timestamp, primaryKey, unique } from 'drizzle-orm/pg-core';
 
 const timestamps = {
 	updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -25,15 +25,20 @@ export const session = pgTable('session', {
 	}).notNull()
 });
 
-export const retinue = pgTable('retinue', {
-	id: serial('id').primaryKey(),
-	name: text('name').notNull(),
-	protagonist: text('protagonist').notNull(),
-	ownerId: integer('owner_id')
-		.notNull()
-		.references(() => user.id),
-	...timestamps
-});
+export const retinue = pgTable(
+	'retinue',
+	{
+		id: serial('id').primaryKey(),
+		slug: text('slug').notNull(),
+		name: text('name').notNull(),
+		protagonist: text('protagonist').notNull(),
+		ownerId: integer('owner_id')
+			.notNull()
+			.references(() => user.id),
+		...timestamps
+	},
+	(table) => [{ ownerSlug: unique('owner_slug').on(table.slug, table.ownerId) }]
+);
 
 export const member = pgTable('member', {
 	id: serial('id').primaryKey(),
