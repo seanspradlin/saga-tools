@@ -1,17 +1,31 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { Member } from '$lib/character-builder';
 	let { data }: { data: PageData } = $props();
+	const members = data.members.map(
+		(m) => new Member(m.characterId, m.desiredRoles, m.learnedAbilities)
+	);
 </script>
 
 <h1 class="font-bold text-xl">{data.retinue.name}</h1>
 <ul>
-	{#each data.members as member (member.id)}
+	{#each members as member (member.id)}
 		<li>
 			<a href="/retinues/{data.retinue.slug}/{member.id}">{member.name}</a>
 			<form method="POST" action="?/removeMember">
 				<input type="hidden" value={member.id} name="characterId" />
 				<button type="submit">Remove</button>
 			</form>
+			<ul>
+				{#each member.roles as role}
+					<li>
+						{#if role.unlocked}
+							+
+						{/if}
+						{role.role.name}
+					</li>
+				{/each}
+			</ul>
 		</li>
 	{/each}
 </ul>

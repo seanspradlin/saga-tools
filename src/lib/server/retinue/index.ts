@@ -31,8 +31,19 @@ export async function getRetinueBySlug(slug: string, ownerId: number) {
 }
 
 export async function getRetinueMembers(retinueId: number) {
-	const result = await db.select().from(member).where(eq(member.retinueId, retinueId));
-	return result;
+	const result = await db.query.member.findMany({
+		where: eq(member.retinueId, retinueId),
+		with: {
+			desiredRoles: true,
+			learnedAbilities: true
+		}
+	});
+	return result.map((r) => ({
+		id: r.id,
+		characterId: r.characterId,
+		desiredRoles: r.desiredRoles.map((dr) => dr.roleId),
+		learnedAbilities: r.learnedAbilities.map((la) => la.abilityId)
+	}));
 }
 
 export async function addCharacterToRetinue(params: { characterId: string; retinueId: number }) {

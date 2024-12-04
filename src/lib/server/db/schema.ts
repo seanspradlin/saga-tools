@@ -39,6 +39,7 @@ export const retinue = pgTable(
 	},
 	(table) => [{ ownerSlug: unique('owner_slug').on(table.slug, table.ownerId) }]
 );
+export const retinueRelations = relations(retinue, ({ many }) => ({ members: many(member) }));
 
 export const member = pgTable('member', {
 	id: serial('id').primaryKey(),
@@ -48,10 +49,10 @@ export const member = pgTable('member', {
 		.references(() => retinue.id),
 	...timestamps
 });
-
-export const retinueRelations = relations(retinue, ({ many }) => ({ members: many(member) }));
-export const memberRelation = relations(member, ({ one }) => ({
-	retinue: one(retinue, { fields: [member.retinueId], references: [retinue.id] })
+export const memberRelation = relations(member, ({ one, many }) => ({
+	retinue: one(retinue, { fields: [member.retinueId], references: [retinue.id] }),
+	learnedAbilities: many(learnedAbility),
+	desiredRoles: many(desiredRole)
 }));
 
 export const learnedAbility = pgTable(
@@ -68,6 +69,9 @@ export const learnedAbility = pgTable(
 		}
 	]
 );
+export const learnedAbilityRelations = relations(learnedAbility, ({ one }) => ({
+	member: one(member, { fields: [learnedAbility.memberId], references: [member.id] })
+}));
 
 export const desiredRole = pgTable(
 	'desired_role',
@@ -83,6 +87,9 @@ export const desiredRole = pgTable(
 		}
 	]
 );
+export const desiredRoleRelations = relations(desiredRole, ({ one }) => ({
+	member: one(member, { fields: [desiredRole.memberId], references: [member.id] })
+}));
 
 export const schema = { user, session, retinue, member, learnedAbility, desiredRole };
 

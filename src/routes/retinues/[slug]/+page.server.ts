@@ -17,13 +17,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		error(404);
 	}
 	const members = await getRetinueMembers(retinue.id);
-	const memberData = members.map((m) => {
-		const charData = characters.find((c) => m.characterId === c.id);
-		if (!charData) {
-			throw new Error(`No character found for ${m.characterId}`);
-		}
-		return charData;
-	});
 	const possibleCharacters = characters.reduce<{ label: string; value: string }[]>((acc, el) => {
 		if (!members.some((e) => e.characterId === el.id)) {
 			acc.push({ label: el.name, value: el.id });
@@ -32,7 +25,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}, []);
 	return {
 		retinue,
-		members: memberData,
+		members,
 		possibleCharacters
 	};
 };
