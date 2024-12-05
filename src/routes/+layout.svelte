@@ -7,7 +7,7 @@
 
 <div class="bg-base flex min-h-screen flex-col text-base">
 	<Header />
-	<main class="container mx-auto h-full flex-grow p-8">
+	<main class="flex-grow p-8">
 		{@render children?.()}
 	</main>
 	<Footer />

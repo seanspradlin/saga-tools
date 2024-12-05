@@ -1,5 +1,5 @@
-import { eq, and } from 'drizzle-orm';
-import { db, retinue, member } from '../db';
+import { eq, and, notInArray } from 'drizzle-orm';
+import { db, retinue, member, learnedAbility, desiredRole } from '../db';
 import slugify from 'slugify';
 
 export async function createRetinue(props: { name: string; protagonist: string; ownerId: number }) {
@@ -46,6 +46,25 @@ export async function getRetinueMembers(retinueId: number) {
 	}));
 }
 
+export async function getRetinueMember(retinueId: number, characterId: string) {
+	const result = await db.query.member.findFirst({
+		where: and(eq(member.retinueId, retinueId), eq(member.characterId, characterId)),
+		with: {
+			desiredRoles: true,
+			learnedAbilities: true
+		}
+	});
+	if (!result) {
+		return null;
+	}
+	return {
+		id: result.id,
+		characterId: result.characterId,
+		desiredRoles: result.desiredRoles.map((dr) => dr.roleId),
+		learnedAbilities: result.learnedAbilities.map((la) => la.abilityId)
+	};
+}
+
 export async function addCharacterToRetinue(params: { characterId: string; retinueId: number }) {
 	await db.insert(member).values({
 		characterId: params.characterId,
@@ -60,4 +79,54 @@ export async function removeCharacterFromRetinue(params: {
 	await db
 		.delete(member)
 		.where(and(eq(member.characterId, params.characterId), eq(member.retinueId, params.retinueId)));
+}
+
+export async function getMember(retinueId: number, characterId: string) {
+	return db.query.member.findFirst({
+		where: and(eq(member.retinueId, retinueId), eq(member.characterId, characterId))
+	});
+}
+
+export async function updateMember(
+	memberId: number,
+	props: { desiredRoles: string[]; learnedAbilities: string[] }
+) {
+	const promises = [];
+	if (props.learnedAbilities.length) {
+		promises.push(
+			db
+				.delete(learnedAbility)
+				.where(
+					and(
+						notInArray(learnedAbility.abilityId, props.learnedAbilities),
+						eq(learnedAbility.memberId, memberId)
+					)
+				)
+		);
+		promises.push(
+			db
+				.insert(learnedAbility)
+				.values(props.learnedAbilities.map((a) => ({ memberId, abilityId: a })))
+				.onConflictDoNothing()
+		);
+	}
+	if (props.desiredRoles.length) {
+		promises.push(
+			db
+				.delete(desiredRole)
+				.where(
+					and(
+						notInArray(desiredRole.roleId, props.desiredRoles),
+						eq(desiredRole.memberId, memberId)
+					)
+				)
+		);
+		promises.push(
+			db
+				.insert(desiredRole)
+				.values(props.desiredRoles.map((r) => ({ memberId, roleId: r })))
+				.onConflictDoNothing()
+		);
+	}
+	await Promise.all(promises);
 }

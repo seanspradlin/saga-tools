@@ -4,17 +4,25 @@ import { Role } from './data/roles';
 
 export class Member {
 	private character: Character;
-	public learnableRoles: Role[];
-	public learnedAbilities: Ability[];
+	learnableRoleIds: string[] = $state([]);
+	learnedAbilityIds: string[] = $state([]);
 
 	constructor(
 		public id: string,
-		public learnableRoleIds: string[],
-		public learnedAbilityIds: string[]
+		learnableRoleIds: string[],
+		learnedAbilityIds: string[]
 	) {
 		this.character = new Character(id);
-		this.learnableRoles = learnableRoleIds.map((roleId) => new Role(roleId));
-		this.learnedAbilities = learnedAbilityIds.map((abilityId) => new Ability(abilityId));
+		this.learnableRoleIds = learnableRoleIds;
+		this.learnedAbilityIds = learnedAbilityIds;
+	}
+
+	get learnableRoles() {
+		return this.learnableRoleIds.map((roleId) => new Role(roleId));
+	}
+
+	get learnedAbilities() {
+		return this.learnedAbilityIds.map((abilityId) => new Ability(abilityId));
 	}
 
 	get roles() {
@@ -52,13 +60,3 @@ export class Member {
 		return this.character.name;
 	}
 }
-
-// export async function serializeMember(memberId: string, desiredRoleIds: string[], learnedAbilityIds: string[]) {
-//   const member = new Member(memberId, desiredRoleIds, learnedAbilityIds)
-//   return {
-//     id: member.id,
-//     name: member.name,
-//     roles: member.roles,
-
-//   }
-// }

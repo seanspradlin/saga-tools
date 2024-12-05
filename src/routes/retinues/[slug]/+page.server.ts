@@ -1,3 +1,4 @@
+import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import {
 	getRetinueBySlug,
@@ -5,7 +6,6 @@ import {
 	addCharacterToRetinue,
 	removeCharacterFromRetinue
 } from '$lib/server/retinue';
-import { error, fail } from '@sveltejs/kit';
 import { characters } from '$lib/data/characters';
 
 export const load: PageServerLoad = async ({ params, locals }) => {

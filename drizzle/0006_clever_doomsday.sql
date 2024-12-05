@@ -1,0 +1,2 @@
+ALTER TABLE "desired_role" ADD CONSTRAINT "member_role" PRIMARY KEY("role_id","member_id");--> statement-breakpoint
+ALTER TABLE "learned_ability" ADD CONSTRAINT "member_ability" PRIMARY KEY("ability_id","member_id");

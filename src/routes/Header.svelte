@@ -1,10 +1,9 @@
 <div class="bg-neutral text-neutral-content">
-	<div class="container mx-auto">
-		<div class="navbar">
-			<h1 class="navbar-start">
-				<a href="/" class="text-xl font-bold">SaGa Tools</a>
-			</h1>
-			<!-- {#if $isLoading}
+	<div class="navbar">
+		<h1 class="navbar-start">
+			<a href="/" class="text-xl font-bold">SaGa Tools</a>
+		</h1>
+		<!-- {#if $isLoading}
 				<div class="navbar-end">
 					<span class="loading loading-dots"></span>
 				</div>
@@ -41,6 +40,5 @@
 					<button type="button" class="btn btn-ghost" onclick={logout}>Logout</button>
 				</div>
 			{/if} -->
-		</div>
 	</div>
 </div>

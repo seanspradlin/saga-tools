@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { Member } from '$lib/character-builder';
+	import { Member } from '$lib/character-builder.svelte';
 	let { data }: { data: PageData } = $props();
 	const members = data.members.map(
 		(m) => new Member(m.characterId, m.desiredRoles, m.learnedAbilities)

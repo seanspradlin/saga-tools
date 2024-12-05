@@ -63,11 +63,9 @@ export const learnedAbility = pgTable(
 			.notNull()
 			.references(() => member.id)
 	},
-	(table) => [
-		{
-			pk: primaryKey({ columns: [table.abilityId, table.memberId] })
-		}
-	]
+	(table) => ({
+		pk: primaryKey({ name: 'member_ability', columns: [table.abilityId, table.memberId] })
+	})
 );
 export const learnedAbilityRelations = relations(learnedAbility, ({ one }) => ({
 	member: one(member, { fields: [learnedAbility.memberId], references: [member.id] })
@@ -81,11 +79,9 @@ export const desiredRole = pgTable(
 			.notNull()
 			.references(() => member.id)
 	},
-	(table) => [
-		{
-			pk: primaryKey({ columns: [table.roleId, table.memberId] })
-		}
-	]
+	(table) => ({
+		pk: primaryKey({ name: 'member_role', columns: [table.roleId, table.memberId] })
+	})
 );
 export const desiredRoleRelations = relations(desiredRole, ({ one }) => ({
 	member: one(member, { fields: [desiredRole.memberId], references: [member.id] })
