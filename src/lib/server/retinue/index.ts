@@ -92,17 +92,24 @@ export async function updateMember(
 	props: { desiredRoles: string[]; learnedAbilities: string[] }
 ) {
 	const promises = [];
-	if (props.learnedAbilities.length) {
-		promises.push(
-			db
-				.delete(learnedAbility)
-				.where(
-					and(
-						notInArray(learnedAbility.abilityId, props.learnedAbilities),
-						eq(learnedAbility.memberId, memberId)
-					)
+	promises.push(
+		db
+			.delete(learnedAbility)
+			.where(
+				and(
+					notInArray(learnedAbility.abilityId, props.learnedAbilities),
+					eq(learnedAbility.memberId, memberId)
 				)
-		);
+			)
+	);
+	promises.push(
+		db
+			.delete(desiredRole)
+			.where(
+				and(notInArray(desiredRole.roleId, props.desiredRoles), eq(desiredRole.memberId, memberId))
+			)
+	);
+	if (props.learnedAbilities.length) {
 		promises.push(
 			db
 				.insert(learnedAbility)
@@ -111,16 +118,6 @@ export async function updateMember(
 		);
 	}
 	if (props.desiredRoles.length) {
-		promises.push(
-			db
-				.delete(desiredRole)
-				.where(
-					and(
-						notInArray(desiredRole.roleId, props.desiredRoles),
-						eq(desiredRole.memberId, memberId)
-					)
-				)
-		);
 		promises.push(
 			db
 				.insert(desiredRole)

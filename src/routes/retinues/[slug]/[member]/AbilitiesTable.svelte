@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { getMember } from './member.svelte';
-	const member = getMember();
+	import type { Member } from '$lib/MemberBuilder.svelte';
+	let { member }: { member: Member } = $props();
 </script>
 
 <div class="overflow-x-auto my-8">
 	<h2 class="text-lg">Required Abilities</h2>
-	{#if !member || !member.requiredAbilities.length}
+	{#if !member.requiredAbilities.length}
 		<p>Select a role to see abilities necessary to learn.</p>
 	{:else}
 		<table class="table">
