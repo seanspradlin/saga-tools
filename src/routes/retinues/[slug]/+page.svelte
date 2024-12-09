@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { Member } from '$lib/character-builder.svelte';
+	import { Member } from '$lib/MemberBuilder.svelte';
 	let { data }: { data: PageData } = $props();
 	const members = data.members.map(
 		(m) => new Member(m.characterId, m.desiredRoles, m.learnedAbilities)
@@ -9,11 +9,11 @@
 
 <h1 class="font-bold text-xl">{data.retinue.name}</h1>
 <ul>
-	{#each members as member (member.id)}
+	{#each members as member (member.characterId)}
 		<li>
-			<a href="/retinues/{data.retinue.slug}/{member.id}">{member.name}</a>
+			<a href="/retinues/{data.retinue.slug}/{member.characterId}">{member.name}</a>
 			<form method="POST" action="?/removeMember">
-				<input type="hidden" value={member.id} name="characterId" />
+				<input type="hidden" value={member.characterId} name="characterId" />
 				<button type="submit">Remove</button>
 			</form>
 			<ul>

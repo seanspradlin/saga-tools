@@ -18,7 +18,7 @@ export const session = pgTable('session', {
 	id: text('id').primaryKey(),
 	userId: integer('user_id')
 		.notNull()
-		.references(() => user.id),
+		.references(() => user.id, { onDelete: 'cascade' }),
 	expiresAt: timestamp('expires_at', {
 		withTimezone: true,
 		mode: 'date'
@@ -34,7 +34,7 @@ export const retinue = pgTable(
 		protagonist: text('protagonist').notNull(),
 		ownerId: integer('owner_id')
 			.notNull()
-			.references(() => user.id),
+			.references(() => user.id, { onDelete: 'cascade' }),
 		...timestamps
 	},
 	(table) => [{ ownerSlug: unique('owner_slug').on(table.slug, table.ownerId) }]
@@ -46,7 +46,7 @@ export const member = pgTable('member', {
 	characterId: text('character_id').notNull(),
 	retinueId: integer('retinue_id')
 		.notNull()
-		.references(() => retinue.id),
+		.references(() => retinue.id, { onDelete: 'cascade' }),
 	...timestamps
 });
 export const memberRelation = relations(member, ({ one, many }) => ({
@@ -61,7 +61,7 @@ export const learnedAbility = pgTable(
 		abilityId: text('ability_id').notNull(),
 		memberId: integer('member_id')
 			.notNull()
-			.references(() => member.id)
+			.references(() => member.id, { onDelete: 'cascade' })
 	},
 	(table) => ({
 		pk: primaryKey({ name: 'member_ability', columns: [table.abilityId, table.memberId] })
@@ -77,7 +77,7 @@ export const desiredRole = pgTable(
 		roleId: text('role_id').notNull(),
 		memberId: integer('member_id')
 			.notNull()
-			.references(() => member.id)
+			.references(() => member.id, { onDelete: 'cascade' })
 	},
 	(table) => ({
 		pk: primaryKey({ name: 'member_role', columns: [table.roleId, table.memberId] })
