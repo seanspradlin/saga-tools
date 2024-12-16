@@ -32,25 +32,23 @@ export function getAllRoles(
 	return r;
 }
 
-export function getRequiredAbilities(learnableRoleIds: string[]) {
-	const abilities: { [key: string]: Ability } = {};
+export function getRequiredAbilities(learnableRoleIds: string[], learnedAbilities: string[]) {
+	const abilities: { [key: string]: { learned: boolean; ability: Ability } } = {};
 	const learnableRoles = getLearnableRoles(learnableRoleIds);
 	learnableRoles.forEach((role) => {
 		role.requiredAbilities.forEach((ability) => {
-			abilities[ability.id] = ability;
+			abilities[ability.id] = {
+				ability,
+				learned: learnedAbilities.includes(ability.id)
+			};
 		});
 	});
 	return Object.values(abilities).sort((a, b) => {
-		if (a.type === b.type) {
-			return a.name > b.name ? 1 : -1;
+		if (a.ability.type === b.ability.type) {
+			return a.ability.name > b.ability.name ? 1 : -1;
 		}
-		return a.type > b.type ? 1 : -1;
+		return a.ability.type > b.ability.type ? 1 : -1;
 	});
-}
-
-export function getRemainingAbilities(learnableRoleIds: string[], learnedAbilityIds: string[]) {
-	const requiredAbilities = getRequiredAbilities(learnableRoleIds);
-	return requiredAbilities.filter((ability) => !learnedAbilityIds.includes(ability.id));
 }
 
 export class Member {
@@ -81,11 +79,7 @@ export class Member {
 	}
 
 	get requiredAbilities() {
-		return getRequiredAbilities(this.learnableRoleIds);
-	}
-
-	get remainingAbilities() {
-		return getRemainingAbilities(this.learnableRoleIds, this.learnedAbilityIds);
+		return getRequiredAbilities(this.learnableRoleIds, this.learnedAbilityIds);
 	}
 
 	get name() {

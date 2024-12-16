@@ -1,35 +1,23 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import CharacterDetails from './CharacterDetails.svelte';
 	import { Member } from '$lib/MemberBuilder.svelte';
 	let { data }: { data: PageData } = $props();
-	const members = data.members.map(
+	let members = data.members.map(
 		(m) => new Member(m.characterId, m.desiredRoles, m.learnedAbilities)
 	);
 </script>
 
 <h1 class="font-bold text-xl">{data.retinue.name}</h1>
-<ul>
-	{#each members as member (member.characterId)}
-		<li>
-			<a href="/retinues/{data.retinue.slug}/{member.characterId}">{member.name}</a>
-			<form method="POST" action="?/removeMember">
-				<input type="hidden" value={member.characterId} name="characterId" />
-				<button type="submit">Remove</button>
-			</form>
-			<ul>
-				{#each member.roles as role}
-					<li>
-						{#if role.unlocked}
-							+
-						{/if}
-						{role.role.name}
-					</li>
-				{/each}
-			</ul>
-		</li>
-	{/each}
-</ul>
-
+{#if !members.length}
+	<div>This retinue does not have any members.</div>
+{:else}
+	<div class="flex flex-col gap-16">
+		{#each members as member (member.characterId)}
+			<CharacterDetails {member} />
+		{/each}
+	</div>
+{/if}
 <form method="POST" action="?/addMember">
 	<label class="form-control w-full">
 		<div class="label">
